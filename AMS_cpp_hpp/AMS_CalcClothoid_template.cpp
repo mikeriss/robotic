@@ -4,6 +4,8 @@
 
 #include "AMS_Robot.hpp"
 #include <newmat/newmatap.h>    // Linear algebra
+//#include <cmath.h>
+#include <tr1/cmath>
 
 using namespace AMS;
 
@@ -43,7 +45,7 @@ int main(int argc, char **argv)
 	P0(2) =  2.0;     // Startpunkt y-Koordinate
 	P1(1) =  3.0;     // Scheitelpunkt x-Koordinate
 	P1(2) =  1.0;     // Scheitelpunkt y-Koordinate
-	P2(1) =  2.5;     // Endpunkt x-Koordinate
+	P2(1) =  -2;     // Endpunkt x-Koordinate
 	P2(2) = -3.0;     // Endpunkt y-Koordinate
 
     robot.init_push_mode();
@@ -51,27 +53,39 @@ int main(int argc, char **argv)
     /********************* Fügen Sie ab hier eigenen Quellcode ein **********************/
 
 	// Minimalen Krümmungsradius aus maximaler Bahn und Winkelgeschwindigkeit berechnen
-	Rmin =
+	Rmin = robot.get_vmax()/robot.get_wmax();
+	Rmin = Rmin/2;
 
     // Vektoren zwischen den Punkten P0 und P1 sowie P1 und P2 festlegen und deren Längen berechnen
-    V01 =
-    V12 =
-    L01 =
-    L12 =
+    V01 =P1 - P0;
+    V12 =P2 - P1;
+    L01 =V01.NormFrobenius();
+    L12 =V12.NormFrobenius();
 
     // Tangentenwinkel im Scheitelpunkt mittels Skalarprodukt und inverser Cosinusfunktion berechnen
     // z-Komponente des Vektorproduktes liefert zusätzlich das Vorzeichen von thetaL
-    thetaL =
+    double alphaL =acos( DotProduct(V01, V12)/(L01 * L12));
+
+    double z_comp = (P1(1) -P0(1))*(P2(2)-P1(2))- ((P1(2)-P0(2))*(P2(1)-P1(1)));
+    if(z_comp < 0 )
+    {
+        thetaL = -alphaL / 2;
+    }
+    else
+    {
+        thetaL = alphaL / 2;
+    }
 
     // Parameter für krümmungsstetigen Übergang mit Klothoide berechnen
-    L =
-    xL =
-    yL =
-    delta =
+    double kappaL = 1/Rmin;
+    L = 2 *(fabs(thetaL)/kappaL);
+    xL = L*(1-(pow(thetaL,2)/(10)+pow(thetaL,4)/216));
+    yL = L*(thetaL/3-(pow(thetaL,3)/(42)+pow(thetaL,5)/1320));
+    delta = yL * tan(thetaL) + xL;
 
     // Berechnung des Start- und des Endpunktes der Klothoiden
-    Pc0 =
-    Pc1 =
+    Pc0 = P0 + (V01/L01) * (L01 - delta);
+    Pc1 = P1 + (V12/L12) * delta;
 
     /******************** Ende des zusätzlich eingefügten Quellcodes ********************/
 
@@ -85,6 +99,7 @@ int main(int argc, char **argv)
     // Zeichnen des ersten Geradenstücks bis zum Beginn der Klothoide
     L1 = (Pc0-P0).NormFrobenius();
     phi1 = atan2(V01(2),V01(1)); // Orientierung des Geradenstücks, d.h. des Vektors V01 berechnen
+
     for( s=0; s<L1; s+=ds) {
         px = P0(1) + s*cos(phi1);
         py = P0(2) + s*sin(phi1);
@@ -102,8 +117,9 @@ int main(int argc, char **argv)
         ys += sin(theta)*ds;
         /********************* Fügen Sie ab hier eigenen Quellcode ein **********************/
         // Koordinatentransformation mit Berücksichtigung des Startpunktes Pc0 und der Richtung phi1
-        px =
-        py =
+        px = Pc0(1) + (xs*cos(phi1) - ys*sin(phi1));
+
+        py = Pc0(2) + (xs*sin(phi1) + ys*cos(phi1));
 
         /******************** Ende des zusätzlich eingefügten Quellcodes ********************/
         robot.draw_point(px, py, 255, 0, 255);

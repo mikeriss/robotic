@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
         // Geschwindigkeiten linear erhöhen bzw. reduzieren unter Berücksichtigung konstanter Beschleunigungen
         v += (v_soll >= v ? av : -av) * (t-t_last);
-
+        w += (w_soll >= w ? aw : -aw) * (t-t_last);
         t_last = t; // Aktuelle Zeit als Referenz für nächsten Zeitschritt speichern
 
         // Geschwindigkeiten ggf. auf Maximalwerte begrenzen

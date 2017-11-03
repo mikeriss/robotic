@@ -22,9 +22,15 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="../../../../../../../usr/include/player-3.1" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="../../../../../../../usr/lib/libplayerc++.so" />
+					<Add library="../../../../../../../usr/lib/libnewmat.so" />
+					<Add library="../../../../../../../usr/lib/liblog4cpp.so" />
+					<Add library="../../../../../../../usr/lib/x86_64-linux-gnu/libboost_system.so" />
+					<Add library="../../../../../../../usr/lib/x86_64-linux-gnu/libboost_program_options.so" />
 				</Linker>
 			</Target>
 		</Build>
@@ -32,7 +38,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="main.cpp" />
+		<Unit filename="../../AMS_cpp_hpp/AMS_DriveRandom.cpp" />
+		<Unit filename="../../AMS_cpp_hpp/AMS_Robot.cpp" />
+		<Unit filename="../../AMS_cpp_hpp/AMS_Robot.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
