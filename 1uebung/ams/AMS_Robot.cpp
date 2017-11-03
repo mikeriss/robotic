@@ -1,4 +1,4 @@
-// Beuth Hochschule für Technik Berlin
+/// Beuth Hochschule für Technik Berlin
 /// Autonome Mobile Systeme
 /// Prof. Dr.-Ing. Volker Sommer, M.Eng. Thimo Langbehn, 2013
 
