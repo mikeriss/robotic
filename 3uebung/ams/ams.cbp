@@ -40,6 +40,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="AMS_CalcClothoid_template.cpp" />
+		<Unit filename="AMS_DriveClothoid_template.cpp" />
 		<Unit filename="AMS_Robot.cpp" />
 		<Unit filename="AMS_Robot.hpp" />
 		<Extensions>
